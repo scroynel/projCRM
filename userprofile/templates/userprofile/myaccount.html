@@ -1,0 +1,23 @@
+{% extends 'core/base.html' %}
+
+{% block title %}My account{% endblock %}
+
+{% block content %}
+<div class="py-6 px-6">
+    <h1 class="mb-6 text-xl">My account</h1>
+
+    <p>
+        <strong>Username: </strong>{{ request.user.username }}
+    </p>
+
+    <p>
+        <strong>Team: </strong><a href="{% url 'teams:detail' active_team.id %}">{{ team.name }}</a>
+        
+        {% if team.created_by == request.user %}
+            <a href="{% url 'teams:edit' team.id %}">(Edit)</a>
+        {% endif %}
+    </p>
+    <hr class="my-4">
+    <a href="{% url 'logout' %}" class="inline-block py-4 px-6 bg-red-400 rounded-xl text-white">Log out</a>
+</div>
+{% endblock %}
