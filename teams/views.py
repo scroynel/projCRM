@@ -5,10 +5,28 @@ from teams.models import Team
 
 from .forms import TeamForm
 
+@login_required
+def teams_list(request):
+    teams = Team.objects.filter(members__in=[request.user])
+
+    return render(request, 'teams/teams_list.html', {
+        'teams': teams
+    })
+
+
+@login_required
+def teams_activate(request, pk):
+    team = Team.objects.filter(members__in=[request.user]).get(pk=pk)
+
+    userprofile = request.user.userprofile
+    userprofile.active_team = team
+    userprofile.save()
+
+    return redirect('teams:list')
 
 @login_required
 def detail(request, pk):
-    team = get_object_or_404(Team, created_by=request.user, pk=pk)
+    team = get_object_or_404(Team, members__in=[request.user], pk=pk)
 
     return render(request, 'teams/detail.html', {
         'team': team
@@ -16,7 +34,7 @@ def detail(request, pk):
 
 @login_required
 def teams_edit(request, pk):
-    team = get_object_or_404(Team, created_by=request.user, pk=pk)
+    team = get_object_or_404(Team, members__in=[request.user], pk=pk)
     
     if request.method == 'POST':
         form = TeamForm(request.POST, instance=team)
@@ -26,7 +44,7 @@ def teams_edit(request, pk):
     
             messages.success(request, 'The changes was saved.')
 
-            return redirect('myaccount')
+            return redirect('userprofile:myaccount')
     else:
         form = TeamForm(instance=team)
 

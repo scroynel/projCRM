@@ -40,10 +40,11 @@ def clients_list(request):
 @login_required
 def clients_add_file(request, pk):
     
-    team = Team.objects.filter(created_by=request.user)[0]
+    
 
     if request.method == 'POST':
         form = AddFileForm(request.POST, request.FILES)
+        team = request.user.userprofile.active_team
 
         if form.is_valid:
             file = form.save(commit=False)
@@ -59,12 +60,13 @@ def clients_add_file(request, pk):
 @login_required
 def clients_detail(request, pk):
     client = get_object_or_404(Client, created_by=request.user, pk=pk)
+    team = request.user.userprofile.active_team
 
     if request.method == 'POST':
         form = AddCommentForm(request.POST)
 
         if form.is_valid():
-            team = Team.objects.filter(created_by=request.user)[0] 
+           
             comment = form.save(commit=False)
             comment.team = team
             comment.created_by = request.user
@@ -84,13 +86,13 @@ def clients_detail(request, pk):
 
 @login_required
 def clients_add(request):
-    team = Team.objects.filter(created_by=request.user)[0]
+    team = request.user.userprofile.active_team
 
     if request.method == 'POST':
         form = AddClientForm(request.POST)
 
         if form.is_valid():
-            # team = Team.objects.filter(created_by=request.user)[0]
+            
             client = form.save(commit=False)
             client.created_by = request.user
             client.team = team

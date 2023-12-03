@@ -50,7 +50,13 @@ Todolist
     -DONE Show active team in the menu
     -DONE Team detail page with member list
     -DONE Clean up base.html with includes
-    - Fix styling to login and signup
+    -DONE Fix styling to login and signup
+    -DONE Fix signup (Should not be request.user, only user)
+    -DONE Make sure the team doesn't need to have a plan (then automatically free)
+    -DONE Add extra field to userprofile to keep track of active team
+    -DONE Make it possible to switch team
+    -DONE Make sure every hardcored team selecter is replaced
+    
 
 
 
